@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "agrostore",
+    "description": "RN ecommerce app",
+    "slug": "agrostore",
+    "privacy": "public",
+    "sdkVersion": "29.0.0",
+    "ios": {
+      "bundleIdentifier": "com.yourcompany.yourappname"
+    },
+    "android": {
+      "package": "com.yourcompany.yourappname"
+    },
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "facebookAppId": "288828778486425",
+    "facebookScheme": "fb288828778486425",
+    "facebookDisplayName": "Agrostore",
+    "extra": {
+      "googleAppId": {
+        "ios": "214622041415-hsrqk5cvkm7mu9d32rratttg6hbgnkcm.apps.googleusercontent.com",
+        "android": "214622041415-g9h8p8bel86hc4p7c8pa8m9bccrqmnd5.apps.googleusercontent.com"
+      }
+    },
+    "githubUrl": "https://github.com/sachenae/InnovationProject.git"
+  }
+}
