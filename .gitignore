@@ -2,5 +2,6 @@ node_modules/**/*
 .expo/*
 npm-debug.*
 TODO.md
-
+yarn-lock
+package-lock.json
 env.js
