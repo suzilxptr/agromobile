@@ -6,6 +6,7 @@ import CategoryCard from '../components/CategoryCard';
 import { theme } from '../constants/theme';
 import DealCaroussel from '../components/DealCaroussel';
 import ProfileBtn from '../commons/ProfileBtn';
+import { inject } from 'mobx-react/native';
 
 const categories = [
   {
@@ -36,7 +37,7 @@ const categories = [
 ];
 
 const NUM_COLUMNS = 3;
-
+@inject('productsStore')
 class HomeScreen extends Component {
   static navigationOptions = {
     title: 'AgroStore',
@@ -45,7 +46,11 @@ class HomeScreen extends Component {
 
   state = {};
 
+  componentDidMount() {
+    this.props.productsStore.getAllProducts();
+  }
   renderItem = ({ item, index }) => {
+    
     let style = {};
 
     if (index % NUM_COLUMNS !== 0) {
