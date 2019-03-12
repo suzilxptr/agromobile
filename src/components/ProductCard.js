@@ -26,6 +26,7 @@ class ProductCard extends Component {
   };
 
   handlePlusPress = () => {
+    console.log("props", this.props);
     this.fadeIn();
     this.setState({ isHover: true });
     if (this.props.product.cartQty === 0) {
