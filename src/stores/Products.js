@@ -34,7 +34,7 @@ createProduct = product => {
   return ProductModel.create({
     id: product._id,
     name: product.name,
-    imageUrl: 2,
+    imageUrl: product.imageUrl,
     kgPrice: product.kgPrice,
     unityPrice: product.unityPrice
   });

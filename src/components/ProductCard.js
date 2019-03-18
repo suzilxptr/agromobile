@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Image,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Animated,
-} from 'react-native';
-import { Box, Text } from 'react-native-design-utility';
-import { observer } from 'mobx-react/native';
-import { Feather } from '@expo/vector-icons';
+  Animated
+} from "react-native";
+import { Box, Text } from "react-native-design-utility";
+import { observer } from "mobx-react/native";
+import { Feather } from "@expo/vector-icons";
 
-import { productImgs } from '../constants/images';
-import { theme } from '../constants/theme';
-import QtyHover from './QtyHover';
+import { productImgs } from "../constants/images";
+import { theme } from "../constants/theme";
+import QtyHover from "./QtyHover";
 
 const ANIM_DURATION = 200;
 
@@ -22,11 +22,10 @@ const BoxAnimated = Animated.createAnimatedComponent(Box);
 class ProductCard extends Component {
   state = {
     isHover: false,
-    cardOpacity: new Animated.Value(1),
+    cardOpacity: new Animated.Value(1)
   };
 
   handlePlusPress = () => {
-    console.log("props", this.props);
     this.fadeIn();
     this.setState({ isHover: true });
     if (this.props.product.cartQty === 0) {
@@ -45,7 +44,7 @@ class ProductCard extends Component {
   handleClose = () => {
     this.fadeOut();
     this.setState({
-      isHover: false,
+      isHover: false
     });
   };
 
@@ -57,14 +56,14 @@ class ProductCard extends Component {
   fadeIn = () => {
     Animated.timing(this.state.cardOpacity, {
       toValue: 0.4,
-      duration: ANIM_DURATION,
+      duration: ANIM_DURATION
     }).start();
   };
 
   fadeOut = () => {
     Animated.timing(this.state.cardOpacity, {
       toValue: 1,
-      duration: ANIM_DURATION,
+      duration: ANIM_DURATION
     }).start();
   };
 
@@ -79,7 +78,7 @@ class ProductCard extends Component {
               <Image
                 style={styles.img}
                 resizeMode="contain"
-                source={product.imageUrl}
+                source={{ uri: `data:image/png;base64,${product.imageUrl}` }}
               />
             </Box>
             <Box>
@@ -105,10 +104,10 @@ class ProductCard extends Component {
               circle={25}
               style={{
                 borderColor: theme.color.green,
-                borderWidth: 1,
+                borderWidth: 1
               }}
               center
-              bg={product.cartQty > 0 ? 'green' : 'white'}
+              bg={product.cartQty > 0 ? "green" : "white"}
             >
               {product.cartQty > 0 ? (
                 <Text color="white" size="sm">
@@ -137,13 +136,13 @@ class ProductCard extends Component {
 const styles = StyleSheet.create({
   img: {
     width: 120,
-    height: 100,
+    height: 100
   },
   plusBtn: {
     top: 10,
     right: 5,
-    position: 'absolute',
-  },
+    position: "absolute"
+  }
 });
 
 export default ProductCard;

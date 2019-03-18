@@ -1,16 +1,16 @@
-import { types } from 'mobx-state-tree';
+import { types } from "mobx-state-tree";
 
-import { store } from '../stores';
+import { store } from "../stores";
 
 export const ProductModel = types
-  .model('ProductModel', {
+  .model("ProductModel", {
     id: types.identifier,
     name: types.string,
-    imageUrl: types.number,
+    imageUrl: types.string,
     unityPrice: types.number,
     kgPrice: types.number,
     cartQty: 0,
-    inCart: false,
+    inCart: false
   })
   .views(self => ({
     get price() {
@@ -18,7 +18,7 @@ export const ProductModel = types
     },
     get totalPrice() {
       return (self.cartQty * self.unityPrice).toFixed(2);
-    },
+    }
   }))
   .actions(self => ({
     incCartQty() {
@@ -36,5 +36,5 @@ export const ProductModel = types
       store.shoppingCartStore.removeProduct(self);
       self.inCart = false;
       self.cartQty = 0;
-    },
+    }
   }));

@@ -1,6 +1,12 @@
 {
   "presets": ["babel-preset-expo"],
-  "plugins": ["transform-decorators-legacy"],
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    "transform-flow-strip-types",
+    "transform-react-jsx-source",
+    "transform-react-jsx-source"
+  ],
   "env": {
     "development": {
       "plugins": ["transform-react-jsx-source"]

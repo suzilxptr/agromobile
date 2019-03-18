@@ -22,9 +22,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "facebookAppId": "288828778486425",
     "facebookScheme": "fb288828778486425",
     "facebookDisplayName": "Agrostore",
@@ -32,8 +30,11 @@
       "googleAppId": {
         "ios": "214622041415-hsrqk5cvkm7mu9d32rratttg6hbgnkcm.apps.googleusercontent.com",
         "android": "214622041415-g9h8p8bel86hc4p7c8pa8m9bccrqmnd5.apps.googleusercontent.com"
-      }
+      },
+      "clientId": "214622041415-hsrqk5cvkm7mu9d32rratttg6hbgnkcm.apps.googleusercontent.com",
+      "androidStandaloneAppClientId": "214622041415-hsrqk5cvkm7mu9d32rratttg6hbgnkcm.apps.googleusercontent.com",
+      "webClientId": "214622041415-hsrqk5cvkm7mu9d32rratttg6hbgnkcm.apps.googleusercontent.com"
     },
-    "githubUrl": "https://github.com/sachenae/InnovationProject.git"
+    "githubUrl": "https://github.com/suzilxptr/agroHost.git"
   }
 }
