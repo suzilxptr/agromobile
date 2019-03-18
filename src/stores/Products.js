@@ -19,6 +19,7 @@ export const ProductsStore = types
       }
     }),
     addProduct: flow(function*(p) {
+      console.log(p.category);
       try {
         const res = yield productApi.post(p).json();
         const newProduct = createProduct(res.product);
@@ -36,6 +37,7 @@ createProduct = product => {
     name: product.name,
     imageUrl: product.imageUrl,
     kgPrice: product.kgPrice,
-    unityPrice: product.unityPrice
+    unityPrice: product.unityPrice,
+    category: product.category
   });
 };

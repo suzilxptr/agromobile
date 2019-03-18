@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import {
   TextInput,
-  Button,
+  Picker,
   StyleSheet,
   Text,
   ToastAndroid,
@@ -12,6 +12,7 @@ import {
 import { Box } from "react-native-design-utility";
 import { Formik } from "formik";
 import { ImagePicker } from "expo";
+import { inject } from "mobx-react/native";
 
 import * as Yup from "yup";
 
@@ -31,15 +32,18 @@ const ProductSchema = Yup.object().shape({
   cartQty: Yup.number()
     .min(2, "Quantity must be larger than 0.")
     .required("Required")
-    .positive("Number cannot be negative")
+    .positive("Number cannot be negative"),
+  category: Yup.string().required("Required"),
+  imageUrl: Yup.mixed().required("Required")
 });
 
 const defaultValues = {
   name: "",
-  imageUrl: "",
+  imageUrl: null,
   unityPrice: "",
   kgPrice: "",
-  cartQty: ""
+  cartQty: "",
+  category: ""
 };
 
 const styles = StyleSheet.create({
@@ -71,7 +75,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#66bb6a",
     padding: 10,
-    margin: 10
+    margin: 10,
+    width: 300
   },
 
   view: {
@@ -79,16 +84,36 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     justifyContent: "center"
-  }
+  },
+  pickerItem: {}
 });
 
+const Categories = [
+  {
+    name: "Grocery"
+  },
+  {
+    name: "Bakery"
+  },
+  {
+    name: "Dairy"
+  },
+  {
+    name: "Meat"
+  },
+  {
+    name: "Personal Care"
+  }
+];
+@inject("productsStore")
 class ProductForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: null,
       visible: false,
-      message: ""
+      message: "",
+      image: null,
+      category: ""
     };
   }
 
@@ -102,7 +127,7 @@ class ProductForm extends Component {
     );
   };
 
-  _pickImage = async () => {
+  _pickImage = async props => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       base64: true,
@@ -110,136 +135,167 @@ class ProductForm extends Component {
     });
 
     if (!result.cancelled) {
+      props.values.imageUrl = result.base64;
       this.setState({ image: result.base64 });
     }
   };
 
   handleSubmit = async (values, { resetForm }) => {
+    console.log(values.category);
     try {
       const status = await this.props.productsStore.addProduct({
-        ...values,
-        imageUrl: this.state.image
+        ...values
       });
       status === "Ok"
         ? this.setState({ visible: true, message: "Product has been added" })
         : this.setState({ visible: true, message: "An error has occured" });
       resetForm({});
-      this.setState({ image: null });
+      this.setState({ image: null, category: "" });
     } catch (err) {
       console.log("error", err);
     }
   };
 
+  onValueChange = (props, item) => {
+    props.values.category = item;
+    this.setState({ category: item });
+  };
+
   render() {
     return (
-      <Box f={1} center mt="xl">
+      <Box f={1} center mt={75}>
         <Formik
           initialValues={defaultValues}
           validationSchema={ProductSchema}
           onSubmit={this.handleSubmit}
         >
-          {props => (
-            <Fragment>
-              <View style={styles.view}>
-                <Text style={styles.label}>Name</Text>
-                <TextInput
-                  onChangeText={props.handleChange("name")}
-                  onBlur={props.handleBlur("name")}
-                  value={props.values.name}
-                  style={styles.homeScreen}
-                  placeholder="Enter product names"
-                />
-                {props.errors.name && props.touched.name && (
-                  <Text style={{ fontSize: 10, color: "red" }}>
-                    {props.errors.name}
-                  </Text>
-                )}
-              </View>
-              <View style={styles.view}>
-                <Text style={styles.label}>Unit Price</Text>
-                <TextInput
-                  onChangeText={props.handleChange("unityPrice")}
-                  onBlur={props.handleBlur("unityPrice")}
-                  value={props.values.unityPrice}
-                  keyboardType="numeric"
-                  style={styles.homeScreen}
-                  placeholder="Enter price per unit"
-                />
-                {props.errors.unityPrice && props.touched.unityPrice && (
-                  <Text style={{ fontSize: 10, color: "red" }}>
-                    {props.errors.unityPrice}
-                  </Text>
-                )}
-              </View>
-
-              <View style={styles.view}>
-                <Text style={styles.label}>Price in kg</Text>
-                <TextInput
-                  onChangeText={props.handleChange("kgPrice")}
-                  onBlur={props.handleBlur("kgPrice")}
-                  value={props.values.kgPrice}
-                  keyboardType="numeric"
-                  style={styles.homeScreen}
-                  placeholder="Enter price per kg"
-                />
-                {props.errors.kgPrice && props.touched.kgPrice && (
-                  <Text style={{ fontSize: 10, color: "red" }}>
-                    {props.errors.kgPrice}
-                  </Text>
-                )}
-              </View>
-
-              <View style={styles.view}>
-                <Text style={styles.label}>Total Quantity</Text>
-                <TextInput
-                  onChangeText={props.handleChange("cartQty")}
-                  onBlur={props.handleBlur("cartQty")}
-                  value={props.values.cartQty}
-                  keyboardType="numeric"
-                  style={styles.homeScreen}
-                  placeholder="Enter total quantity"
-                />
-                {props.errors.cartQty && props.touched.cartQty && (
-                  <Text style={{ fontSize: 10, color: "red" }}>
-                    {props.errors.cartQty}
-                  </Text>
-                )}
-              </View>
-
-              <View style={styles.view}>
-                <TouchableOpacity
-                  onPress={this._pickImage}
-                  style={styles.imageUpload}
-                >
-                  <Text>Upload Image</Text>
-                </TouchableOpacity>
-                {this.state.image && (
-                  <Image
-                    source={{
-                      uri: `data:image/png;base64,${this.state.image}`
-                    }}
-                    style={{ width: 200, height: 200 }}
+          {props => {
+            return (
+              <Fragment>
+                <View style={styles.view}>
+                  <Text style={styles.label}>Name</Text>
+                  <TextInput
+                    onChangeText={props.handleChange("name")}
+                    onBlur={props.handleBlur("name")}
+                    value={props.values.name}
+                    style={styles.homeScreen}
+                    placeholder="Enter product name"
                   />
-                )}
-                {props.errors.imageUrl && props.touched.imageUrl && (
-                  <Text style={{ fontSize: 10, color: "red" }}>
-                    {props.errors.imageUrl}
-                  </Text>
-                )}
-              </View>
+                  {props.errors.name && props.touched.name && (
+                    <Text style={{ fontSize: 10, color: "red" }}>
+                      {props.errors.name}
+                    </Text>
+                  )}
+                </View>
+                <View style={styles.view}>
+                  <Text style={styles.label}>Unit Price</Text>
+                  <TextInput
+                    onChangeText={props.handleChange("unityPrice")}
+                    onBlur={props.handleBlur("unityPrice")}
+                    value={props.values.unityPrice}
+                    keyboardType="numeric"
+                    style={styles.homeScreen}
+                    placeholder="Enter price per unit"
+                  />
+                  {props.errors.unityPrice && props.touched.unityPrice && (
+                    <Text style={{ fontSize: 10, color: "red" }}>
+                      {props.errors.unityPrice}
+                    </Text>
+                  )}
+                </View>
 
-              {this.state.visible &&
-                this._toastWithDurationGravityOffsetHandler()}
-              <View style={styles.view}>
-                <TouchableOpacity
-                  onPress={props.handleSubmit}
-                  style={styles.submit}
-                >
-                  <Text>Add Product</Text>
-                </TouchableOpacity>
-              </View>
-            </Fragment>
-          )}
+                <View style={styles.view}>
+                  <Text style={styles.label}>Price in kg</Text>
+                  <TextInput
+                    onChangeText={props.handleChange("kgPrice")}
+                    onBlur={props.handleBlur("kgPrice")}
+                    value={props.values.kgPrice}
+                    keyboardType="numeric"
+                    style={styles.homeScreen}
+                    placeholder="Enter price per kg"
+                  />
+                  {props.errors.kgPrice && props.touched.kgPrice && (
+                    <Text style={{ fontSize: 10, color: "red" }}>
+                      {props.errors.kgPrice}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.view}>
+                  <Text style={styles.label}>Total Quantity</Text>
+                  <TextInput
+                    onChangeText={props.handleChange("cartQty")}
+                    onBlur={props.handleBlur("cartQty")}
+                    value={props.values.cartQty}
+                    keyboardType="numeric"
+                    style={styles.homeScreen}
+                    placeholder="Enter total quantity"
+                  />
+                  {props.errors.cartQty && props.touched.cartQty && (
+                    <Text style={{ fontSize: 10, color: "red" }}>
+                      {props.errors.cartQty}
+                    </Text>
+                  )}
+                </View>
+
+                <View>
+                  <Text style={styles.label}>Category</Text>
+                  <Picker
+                    selectedValue={this.state.category}
+                    onValueChange={this.onValueChange.bind(this, props)}
+                    style={{ width: 300, height: 70, marginLeft: 0 }}
+                  >
+                    {Categories.map((category, i) => (
+                      <Picker.Item
+                        label={category.name}
+                        value={category.name}
+                        key={i}
+                        style={styles.pickerItem}
+                      />
+                    ))}
+                  </Picker>
+                  {props.errors.category && props.touched.category && (
+                    <Text style={{ fontSize: 10, color: "red" }}>
+                      {props.errors.category}
+                    </Text>
+                  )}
+                </View>
+
+                <View style={styles.view}>
+                  <TouchableOpacity
+                    onPress={this._pickImage.bind(this, props)}
+                    style={styles.imageUpload}
+                  >
+                    <Text>Upload Image</Text>
+                  </TouchableOpacity>
+                  {props.values.imageUrl && (
+                    <Image
+                      source={{
+                        uri: `data:image/png;base64,${this.state.image}`
+                      }}
+                      style={{ width: 200, height: 200 }}
+                    />
+                  )}
+                  {props.errors.imageUrl && props.touched.imageUrl && (
+                    <Text style={{ fontSize: 10, color: "red" }}>
+                      {props.errors.imageUrl}
+                    </Text>
+                  )}
+                </View>
+
+                {this.state.visible &&
+                  this._toastWithDurationGravityOffsetHandler()}
+                <View style={styles.view}>
+                  <TouchableOpacity
+                    onPress={props.handleSubmit}
+                    style={styles.submit}
+                  >
+                    <Text>Add Product</Text>
+                  </TouchableOpacity>
+                </View>
+              </Fragment>
+            );
+          }}
         </Formik>
       </Box>
     );

@@ -10,7 +10,8 @@ export const ProductModel = types
     unityPrice: types.number,
     kgPrice: types.number,
     cartQty: 0,
-    inCart: false
+    inCart: false,
+    category: types.string
   })
   .views(self => ({
     get price() {
