@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import { StatusBar, ScrollView } from "react-native";
-import { Box } from "react-native-design-utility";
 import ProductForm from "../commons/ProductForm";
 
 class ListScreen extends Component {

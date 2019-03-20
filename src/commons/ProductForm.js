@@ -4,10 +4,10 @@ import {
   Picker,
   StyleSheet,
   Text,
+  View,
   ToastAndroid,
   Image,
-  TouchableOpacity,
-  View
+  TouchableOpacity
 } from "react-native";
 import { Box } from "react-native-design-utility";
 import { Formik } from "formik";
@@ -141,7 +141,6 @@ class ProductForm extends Component {
   };
 
   handleSubmit = async (values, { resetForm }) => {
-    console.log(values.category);
     try {
       const status = await this.props.productsStore.addProduct({
         ...values
