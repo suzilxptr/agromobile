@@ -1,9 +1,19 @@
 import React, { Component } from "react";
-import { Box } from "react-native-design-utility";
 import { ScrollView, View } from "react-native";
 import { inject } from "mobx-react/native";
 
 import ProductCard from "../components/ProductCard";
+import { Dimensions } from "react-native";
+
+const width = Dimensions.get("window").width;
+
+const styles = {
+  flexbox: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap"
+  }
+};
 
 @inject("productsStore")
 class CategoryScreen extends Component {
@@ -16,43 +26,43 @@ class CategoryScreen extends Component {
     const { navigation } = this.props;
     const name = navigation.getParam("name");
     return (
-      <Box>
+      <ScrollView>
         {name === "Grocery" && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.flexbox}>
             {this.props.productsStore.grocery.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </ScrollView>
+          </View>
         )}
         {name === "Dairy" && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.flexbox}>
             {this.props.productsStore.dairy.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </ScrollView>
+          </View>
         )}
         {name === "Bakery" && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.flexbox}>
             {this.props.productsStore.bakery.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </ScrollView>
+          </View>
         )}
         {name === "Meat" && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.flexbox}>
             {this.props.productsStore.meat.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </ScrollView>
+          </View>
         )}
         {name === "Personal Care" && (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View style={styles.flexbox}>
             {this.props.productsStore.personalCare.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </ScrollView>
+          </View>
         )}
-      </Box>
+      </ScrollView>
     );
   }
 }

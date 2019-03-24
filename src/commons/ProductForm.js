@@ -120,7 +120,7 @@ class ProductForm extends Component {
   _toastWithDurationGravityOffsetHandler = () => {
     ToastAndroid.showWithGravityAndOffset(
       this.state.message,
-      ToastAndroid.LONG,
+      ToastAndroid.SHORT,
       ToastAndroid.CENTER,
       25,
       50
@@ -149,7 +149,7 @@ class ProductForm extends Component {
         ? this.setState({ visible: true, message: "Product has been added" })
         : this.setState({ visible: true, message: "An error has occured" });
       resetForm({});
-      this.setState({ image: null, category: "" });
+      this.setState({ image: null, category: "", visible: false });
     } catch (err) {
       console.log("error", err);
     }

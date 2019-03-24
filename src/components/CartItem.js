@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Image,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  LayoutAnimation,
-} from 'react-native';
-import { Box, Text } from 'react-native-design-utility';
-import { Feather } from '@expo/vector-icons';
-import { observer } from 'mobx-react/native';
+  LayoutAnimation
+} from "react-native";
+import { Box, Text } from "react-native-design-utility";
+import { Feather } from "@expo/vector-icons";
+import { observer } from "mobx-react/native";
 
-import { theme } from '../constants/theme';
-import QtyHover from './QtyHover';
+import { theme } from "../constants/theme";
+import QtyHover from "./QtyHover";
 
 const CustomLayoutAnimation = {
   duration: 200,
   update: {
-    type: LayoutAnimation.Types.easeInEaseOut,
-  },
+    type: LayoutAnimation.Types.easeInEaseOut
+  }
 };
 
 @observer
 class CartItem extends Component {
   state = {
-    isHover: false,
+    isHover: false
   };
 
   componentWillUnmount() {
@@ -44,7 +44,7 @@ class CartItem extends Component {
 
   handleClose = () => {
     this.setState({
-      isHover: false,
+      isHover: false
     });
   };
 
@@ -62,7 +62,7 @@ class CartItem extends Component {
             <Image
               style={styles.img}
               resizeMode="contain"
-              source={product.imageUrl}
+              source={{ uri: `data:image/png;base64,${product.imageUrl}` }}
             />
           </Box>
           <Box f={1} pl="xs">
@@ -121,9 +121,9 @@ class CartItem extends Component {
 
 const styles = StyleSheet.create({
   img: {
-    width: '100%',
-    height: 100,
-  },
+    width: "100%",
+    height: 100
+  }
 });
 
 export default CartItem;

@@ -4,19 +4,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Animated
+  Animated,
+  View,
+  Dimensions
 } from "react-native";
 import { Box, Text } from "react-native-design-utility";
 import { observer } from "mobx-react/native";
 import { Feather } from "@expo/vector-icons";
-
-import { productImgs } from "../constants/images";
 import { theme } from "../constants/theme";
 import QtyHover from "./QtyHover";
 
 const ANIM_DURATION = 200;
 
 const BoxAnimated = Animated.createAnimatedComponent(Box);
+const width = Dimensions.get("window").width;
 
 @observer
 class ProductCard extends Component {
@@ -68,20 +69,31 @@ class ProductCard extends Component {
   };
 
   render() {
-    const { isHover, cardOpacity, qtyCardOpacity } = this.state;
+    const { isHover, cardOpacity } = this.state;
     const { product } = this.props;
     return (
-      <Box bg="white" w={150} p="sm" position="relative">
+      <View
+        style={{
+          width: width / 2,
+          height: 250,
+          backgroundColor: "white",
+          marginBottom: 2,
+          paddingLeft: 5,
+          paddingRight: 5,
+          borderRightWidth: 2,
+          borderColor: "#eeeeee"
+        }}
+      >
         <TouchableWithoutFeedback onPress={this.handleClose}>
           <BoxAnimated o={cardOpacity}>
-            <Box mb="sm">
+            <View>
               <Image
                 style={styles.img}
                 resizeMode="contain"
                 source={{ uri: `data:image/png;base64,${product.imageUrl}` }}
               />
-            </Box>
-            <Box>
+            </View>
+            <View>
               <Text left size="sm" bold>
                 €{product.price} each
               </Text>
@@ -92,7 +104,7 @@ class ProductCard extends Component {
                 At €{product.kgPrice.toFixed(2)}
                 /kg
               </Text>
-            </Box>
+            </View>
           </BoxAnimated>
         </TouchableWithoutFeedback>
         {!isHover && (
@@ -128,15 +140,14 @@ class ProductCard extends Component {
             containerStyle={{ top: 10, right: 10, left: 10, zIndex: 99 }}
           />
         )}
-      </Box>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   img: {
-    width: 120,
-    height: 100
+    height: 175
   },
   plusBtn: {
     top: 10,
